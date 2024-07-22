@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReAct: Combining Reasoning and Acting</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>ReAct: Combining Reasoning and Acting for Effective Question Answering</h1>
+    </header>
+    <main>
+        <img src="images/react.png" alt="My ReAct Overview" style="max-width: 100%; height: auto; display: block; margin: 0 auto 20px;">
+
+        <section>
+            <h2>Introduction</h2>
+            <p>When you're (human) asked a question, how do you arrive at the answer? Typically, you go through a series of logical steps, actions, and observations. Applying a similar method to Language Learning Models (LLMs) can yield better answers than merely relying on their training or external data.</p>
+            <p>Because LLMs are basically compressions of vast amounts of training data. If we ask a question directly, they just basically answer it by using the training data without any logical reasoning. They understand natural language well and possess general common knowledge. However, relying solely on training data can lead to hallucinations, especially when current or specific information is required. To ensure accuracy, it's crucial to feed LLMs with new information from external sources like Google.</p>
+        </section>
+        <section>
+            <h2>Understanding ReAct with an Example</h2>
+            <p>Consider the question: "Who is the winner of the Major of CS2 in 2024?"</p>
+            <ul>
+                <li><strong>Thought 1:</strong> What is CS2? What is the Major of CS2? I need to search "CS2" and "Major of CS2" on Google.</li>
+                <li><strong>Action 1:</strong> Search for "CS2" and "Major of CS2" on Google.</li>
+                <li><strong>Observation 1:</strong> Google search result: Counter-Strike 2 is a 2023 free-to-play tactical first-person shooter game developed by Valve. The Majors are Counter-Strike esports tournaments sponsored by Valve.</li>
+                <li><strong>Thought 2:</strong> Now I understand what CS2 and the Majors are. To find the 2024 winner, I need to know how many majors were organized in 2024. I should search for "CS2 Majors organized in 2024".</li>
+                <li><strong>Action 2:</strong> Search for "CS2 Majors held in 2024".</li>
+                <li><strong>Observation 2:</strong> There are two CS2 Majors in 2024. The PGL Major Copenhagen 2024, held in March, was won by Natus Vincere (NaVi). The Perfect World Shanghai Major 2024 will be held in December.</li>
+                <li><strong>Thought 3:</strong> The winner of the PGL Major Copenhagen 2024 is NaVi. I have enough information to answer the question.</li>
+            </ul>
+        </section>
+        <section>
+            <h2>My ReAct Implementation</h2>
+            <p>Here's the sequence my ReAct implementation follows:</p>
+            <ol>
+                <li>Initialize Memory: Start with an empty memory to store thoughts, actions, and observations.</li>
+                <li>Prompt the LLM: Instruct the LLM to follow reasoning (thoughts), actions, and observations to answer the question. Emphasize that it should not rely on training data and should validate its thoughts with Google search results.</li>
+                <li>Thought and Action: The LLM formulates "Thought 1" and decides to search Google with "Query 1".</li>
+                <li>Search and Observation: A custom Google search library executes "Query 1", scraping the top K web results. Since it's impractical to feed all scraped text to the LLM, FAISS and LLM embeddings are used to extract relevant information based on embedding similarity. This information becomes "Observation 1".</li>
+                <li>Iterate: Add "Thought 1", "Query 1", and "Observation 1" to the prompt. Ask the LLM if it has enough reasoning to answer the question. Repeat steps 2-4 until the LLM has sufficient information.</li>
+            </ol>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024</p>
+    </footer>
+</body>
+</html>
